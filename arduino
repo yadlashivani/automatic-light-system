@@ -1,0 +1,47 @@
+/*
+HC-SR05 pin Arduino pin Relay Board
+vcc 5V X
+Trig pin 9 X
+Echo pin 8 X
+Gnd Gnd Gnd
+X pin 12 signal pin
+X Vin
++V
+*/
+int s;
+int state=0;
+void setup() {
+Serial.begin(9600);
+pinMode(8, INPUT);
+pinMode(9, OUTPUT);
+pinMode(12, OUTPUT);
+digitalWrite(9, LOW);
+digitalWrite(8, LOW);
+}
+void loop() {
+long duration, inches, cm;
+digitalWrite(9, HIGH);
+delayMicroseconds(5);
+digitalWrite(9, LOW);
+delayMicroseconds(5);
+duration = pulseIn(8, HIGH);
+inches = microsecondsToInches(duration);
+cm = microsecondsToCentimeters(duration);
+Serial.print(inches);
+Serial.print("in, ");
+Serial.print(cm);
+Serial.print("cm"); Serial.println();
+if(inches<12){ // change number increse or decrese distanse eg 12 for 12 inches
+digitalWrite(12, HIGH);
+delay(2000);
+}else{
+digitalWrite(12, LOW);
+}
+delay(100);
+}
+long microsecondsToInches(long microseconds) {
+return microseconds / 74 / 2;
+}
+long microsecondsToCentimeters(long microseconds) {
+return microseconds / 29 / 2;
+}
